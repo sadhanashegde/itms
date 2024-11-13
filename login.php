@@ -19,15 +19,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         session_start();
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
+        
 
         // Redirect based on role
-        if ($user['role'] == 'taxpayer') {
-            header("Location: taxpayer.php");
-        } elseif ($user['role'] == 'taxprofessional') {
-            header("Location: professional.php");
-        } else {
-            header("Location: taxauthority.php");
-        }
+    // Redirect based on role
+    if ($user['role'] == 'taxpayer') {
+        header("Location: taxpayer.php");
+    } elseif ($user['role'] == 'taxprofessional') {
+        header("Location: professional.php");
+    } elseif ($user['role'] == 'taxauthority') {
+        header("Location: taxauthority.php");
+    }
+
         exit();
     } else {
         echo "Invalid username or password.";

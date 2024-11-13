@@ -103,3 +103,13 @@ CREATE TABLE Notification (
     Status ENUM('Unread', 'Read'),
     FOREIGN KEY (UserID) REFERENCES Taxpayer(TaxpayerID)
 );
+ALTER TABLE User
+ADD COLUMN email VARCHAR(255),
+ADD COLUMN phone VARCHAR(20);
+ALTER TABLE Taxpayer ADD COLUMN user_id INT;
+ALTER TABLE Taxpayer ADD FOREIGN KEY (user_id) REFERENCES User(id);
+ALTER TABLE Taxprofessional ADD COLUMN user_id INT;
+ALTER TABLE Taxprofessional ADD FOREIGN KEY (user_id) REFERENCES User(id);
+ALTER TABLE Taxpayer
+ADD CONSTRAINT fk_tax_professional
+FOREIGN KEY (tax_professional_id) REFERENCES TaxProfessional(user_id);

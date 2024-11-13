@@ -11,51 +11,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $role = $_POST["role"];
     $tin = "TIN" . rand(1000, 9999);  // Generate random TIN
 
-    // Check the role and insert data into the appropriate table
-    if ($role == "taxpayer") {
-        // SQL query for taxpayer
-        $query = "INSERT INTO Taxpayer (name, tin, address, email, phone, registrationdate, password) 
-                  VALUES (?, ?, ?, ?, ?, NOW(), ?)";
-        $stmt = $conn->prepare($query);
-        
-        if ($stmt === false) {
-            die('MySQL prepare error: ' . $conn->error);  // Debugging line to check SQL query
-        }
-
-        $stmt->bind_param("ssssss", $name, $tin, $address, $email, $phone, $password);
-
-    } else {
-        // SQL query for taxprofessional
-        $certification_id = "CERT" . rand(1000, 9999);  // Generate random certification ID
-        $query = "INSERT INTO TaxProfessional (name, tin, certification_id, email, phone, registrationdate, password) 
-                  VALUES (?, ?, ?, ?, ?, NOW(), ?)";
-        $stmt = $conn->prepare($query);
-
-        if ($stmt === false) {
-            die('MySQL prepare error: ' . $conn->error);  // Debugging line to check SQL query
-        }
-
-        $stmt->bind_param("ssssss", $name, $tin, $certification_id, $email, $phone, $password);
+    // Insert into User table first
+    $userQuery = "INSERT INTO User (name, password, role, email, phone) VALUES (?, ?, ?, ?, ?)";
+    $userStmt = $conn->prepare($userQuery);
+    
+    if ($userStmt === false) {
+        die('MySQL prepare error for User table: ' . $conn->error);  // Debugging line to check User query
     }
 
-    // Check if the query executed successfully
-    if ($stmt->execute()) {
-        // Insert into User table
-        $userQuery = "INSERT INTO User (name, password, role) VALUES (?, ?, ?)";
-        $userStmt = $conn->prepare($userQuery);
-        
-        if ($userStmt === false) {
-            die('MySQL prepare error: ' . $conn->error);  // Debugging line to check User query
+    $userStmt->bind_param("sssss", $name, $password, $role, $email, $phone);
+    
+    if ($userStmt->execute()) {
+        // Retrieve the last inserted user_id
+        $user_id = $conn->insert_id;
+
+        // Now insert into the appropriate role table based on the user_id
+        if ($role == "taxpayer") {
+            // SQL query for taxpayer
+            $query = "INSERT INTO Taxpayer (user_id, name, tin, address, email, phone, registrationdate, password) 
+                      VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+            $stmt = $conn->prepare($query);
+            
+            if ($stmt === false) {
+                die('MySQL prepare error for Taxpayer: ' . $conn->error);  // Debugging line to check SQL query
+            }
+
+            $stmt->bind_param("issssss", $user_id, $name, $tin, $address, $email, $phone, $password);
+
+        } else {
+            // SQL query for taxprofessional
+            $certification_id = "CERT" . rand(1000, 9999);  // Generate random certification ID
+            $query = "INSERT INTO TaxProfessional (user_id, name, tin, certification_id, email, phone, registrationdate, password) 
+                      VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+            $stmt = $conn->prepare($query);
+
+            if ($stmt === false) {
+                die('MySQL prepare error for TaxProfessional: ' . $conn->error);  // Debugging line to check SQL query
+            }
+
+            $stmt->bind_param("issssss", $user_id, $name, $tin, $certification_id, $email, $phone, $password);
         }
 
-        $userStmt->bind_param("sss", $name, $password, $role);
-        $userStmt->execute();  // Execute user insert query
+        // Execute the main role-specific insertion
+        if ($stmt->execute()) {
+            echo "User and role-specific data inserted successfully!";
+            header("Location: login.php");  // Redirect to login page
+            exit();
+        } else {
+            echo "Error inserting into main role table: " . $stmt->error;  // Print error message if query fails
+        }
 
-        header("Location: login.php");  // Redirect to login page
-        exit();
     } else {
-        echo "Error: " . $stmt->error;  // Print error message if query fails
+        echo "Error inserting into User table: " . $userStmt->error;  // Print error message if query fails
     }
+
+    // Close the prepared statements
+    $userStmt->close();
+    if (isset($stmt)) $stmt->close();
 }
 ?>
 
