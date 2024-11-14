@@ -113,3 +113,19 @@ ALTER TABLE Taxprofessional ADD FOREIGN KEY (user_id) REFERENCES User(id);
 ALTER TABLE Taxpayer
 ADD CONSTRAINT fk_tax_professional
 FOREIGN KEY (tax_professional_id) REFERENCES TaxProfessional(user_id);
+CREATE TABLE tax_revenues (
+    revenue_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    amount DECIMAL(10, 2),
+    FOREIGN KEY (user_id) REFERENCES taxpayer(user_id)
+);
+ALTER TABLE tax_revenues
+ADD COLUMN tax_professional_id INT;
+CREATE TABLE Documents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    file_path VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES User(id) -- Assumes your Users table is named 'Users' and has an 'id' column 
+);
+

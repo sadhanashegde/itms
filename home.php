@@ -1,6 +1,4 @@
-<!--home.php-->
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,11 +7,17 @@
     <link rel="stylesheet" href="style_home.css"> <!-- Link to an external CSS file -->
 </head>
 <body>
+<style>
+    body {
+        background-image: url("C:/xampp/htdocs/itms/income.jpeg");
+        background-size: cover;
+    }
+</style>
 
 <!-- Header -->
 <header>
     <div class="header-left">
-        <a href="login.php" class="login-btn">Login/Signup</a>
+        <a href="login.php" class="login-btn">Login / Signup</a>
     </div>
     <div class="header-right">
         <h1>ITMS - Income Tax Management System</h1>

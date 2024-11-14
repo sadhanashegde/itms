@@ -78,16 +78,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f9; margin: 0; }
-        .container { max-width: 400px; padding: 2em; background: #fff; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); border-radius: 8px; }
-        h2 { text-align: center; color: #333; }
+        /* General Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* Body and Background */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0a0b0b; /* Dark background color */
+            color: #fff; /* Light text color for contrast */
+            margin: 0;
+        }
+
+        /* Container Styling */
+        .container {
+            width: 500px; /* Increased width for a larger container */
+            padding: 3em; /* Increased padding for more space */
+            background: #1a1a1a; /* Darker background for container */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        /* Heading Styling */
+        h2 {
+            text-align: center;
+            color: #ff4757; /* Accent color for heading */
+        }
+
+        /* Form Styling */
         form { display: flex; flex-direction: column; }
-        input, select, button { padding: 10px; margin: 8px 0; border-radius: 4px; border: 1px solid #ddd; }
-        button { background-color: #28a745; color: #fff; border: none; cursor: pointer; }
-        button:hover { background-color: #218838; }
-        .redirect-link { text-align: center; margin-top: 10px; }
-        .redirect-link a { color: #007bff; text-decoration: none; }
-        .redirect-link a:hover { text-decoration: underline; }
+
+        /* Input, Select, and Button Styling */
+        input, select, button {
+            padding: 12px; /* Slightly larger padding for inputs */
+            margin: 10px 0; /* Increased margin */
+            border-radius: 4px;
+            border: 1px solid #333;
+            background-color: #333; /* Dark input background */
+            color: #fff; /* Light text color */
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #28a745; /* Green for button */
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* Link Styling */
+        .redirect-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .redirect-link a {
+            color: #ff4757; /* Accent color for links */
+            text-decoration: none;
+        }
+
+        .redirect-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
